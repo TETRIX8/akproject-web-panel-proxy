@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="panel-logo.png" alt="WEB PANEL PROXY" width="190">
+  <img src="panel-logo.png" alt="AKPROJECT PROXY" width="190">
 </p>
 
-<h1 align="center">WEB PANEL PROXY V 2.0.2</h1>
+<h1 align="center">AKPROJECT PROXY V 2.0.2</h1>
 
 <p align="center">Telegram WEB Proxy и панель управления для собственного VPS</p>
 
-WEB PANEL PROXY V 2.0 — установщик Telegram WEB Proxy и веб-панели управления для VPS.
+AKPROJECT PROXY — установщик Telegram WEB Proxy и веб-панели управления для VPS.
 
 [АРЕНДОВАТЬ VPS И ДОМЕН](https://play2go.cloud/?ref_id=m1o4quWG0sE)
 
@@ -43,7 +43,7 @@ WEB PANEL PROXY V 2.0 — установщик Telegram WEB Proxy и веб-па
 [АРЕНДОВАТЬ VPS И ДОМЕН](https://play2go.cloud/?ref_id=m1o4quWG0sE)
 
 ```bash
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/POLESNIESOVETI12/web-panel-proxy/v2.0.2/install.sh)"
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/TETRIX8/akproject-web-panel-proxy/v2.0.2/install.sh)"
 ```
 
 Во время установки укажите:
@@ -89,10 +89,10 @@ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/POLESNIESOVETI12/we
 
 ## Обновление одной командой
 
-Для уже установленного WEB PANEL PROXY используйте отдельную безопасную команду:
+Для уже установленного AKPROJECT PROXY используйте отдельную безопасную команду:
 
 ```bash
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/POLESNIESOVETI12/web-panel-proxy/v2.0.2/update.sh)"
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/TETRIX8/akproject-web-panel-proxy/v2.0.2/update.sh)"
 ```
 
 Обновление меняет файлы панели, но сохраняет пользователей, секреты, пароль администратора, приватный адрес панели и HTML-заглушку сайта. Перед началом автоматически создаётся резервная копия в `/root/web-panel-proxy-update-backup-ДАТА-ВРЕМЯ`. Relay сначала проходит тесты и проверку конфигурации; при ошибке предыдущий бинарник и состояние панели восстанавливаются автоматически.
@@ -102,7 +102,7 @@ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/POLESNIESOVETI12/we
 ## Удаление одной командой
 
 ```bash
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/POLESNIESOVETI12/web-panel-proxy/v2.0.2/uninstall-web-proxy.sh)"
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/TETRIX8/akproject-web-panel-proxy/v2.0.2/uninstall-web-proxy.sh)"
 ```
 
 Также после обычной установки доступна локальная команда:
@@ -111,7 +111,7 @@ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/POLESNIESOVETI12/we
 sudo /usr/local/sbin/web-panel-proxy-uninstall
 ```
 
-Скрипт не просит вводить подтверждение. Он останавливает и удаляет службы, правила firewall, конфигурации, Secrets, панель, сайт и компоненты WEB PANEL PROXY V 2.0. Если после установки в Caddy были добавлены другие сайты, удаляется только блок домена WEB PANEL PROXY, а остальные сайты и Caddy сохраняются.
+Скрипт не просит вводить подтверждение. Он останавливает и удаляет службы, правила firewall, конфигурации, Secrets, панель, сайт и компоненты AKPROJECT PROXY. Если после установки в Caddy были добавлены другие сайты, удаляется только блок домена AKPROJECT PROXY, а остальные сайты и Caddy сохраняются.
 
 ## Безопасность
 
@@ -143,8 +143,8 @@ systemctl restart tproxy-panel
 
 ## Автор
 
-- YouTube: https://www.youtube.com/@POLESNIESOVETI12
-- GitHub: https://github.com/POLESNIESOVETI12/web-panel-proxy
+- YouTube: https://github.com/TETRIX8/akproject-web-panel-proxy
+- GitHub: https://github.com/TETRIX8/akproject-web-panel-proxy
 
 Поддержка- TEZgpG5rKFZPi8znziAyMD3wiEJQJ3eaQG (USDT TRC 20)
 

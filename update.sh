@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Safe in-place updater for WEB PANEL PROXY V 2.0.
+# Safe in-place updater for AKPROJECT PROXY.
 set -Eeuo pipefail
 umask 077
 
-REPOSITORY="https://github.com/POLESNIESOVETI12/web-panel-proxy.git"
+REPOSITORY="https://github.com/TETRIX8/akproject-web-panel-proxy.git"
 RELEASE_REF="${WEB_PANEL_PROXY_REF:-v2.0.2}"
 SERVICE="/etc/systemd/system/tproxy-panel.service"
 LEGACY_SERVICE="/etc/systemd/system/web-proxy-panel.service"
@@ -14,10 +14,10 @@ die() { echo "ERROR: $*" >&2; exit 1; }
 [[ ${EUID} -eq 0 ]] || die "Run as root: sudo -i"
 command -v flock >/dev/null 2>&1 || die "flock is required (package: util-linux)."
 exec 9>/run/lock/web-panel-proxy.lock
-flock -n 9 || die "Another WEB PANEL PROXY install, update or removal is already running."
+flock -n 9 || die "Another AKPROJECT PROXY install, update or removal is already running."
 
 echo "============================================================"
-echo "       WEB PANEL PROXY V 2.0 — SAFE UPDATE"
+echo "       AKPROJECT PROXY — SAFE UPDATE"
 echo "============================================================"
 echo "Users, administrator password, panel URL and site HTML will be retained."
 
@@ -149,7 +149,7 @@ finish() {
 }
 trap finish EXIT
 
-echo "Downloading the current WEB PANEL PROXY V 2.0 files..."
+echo "Downloading the current AKPROJECT PROXY files..."
 git clone --depth 1 --branch "$RELEASE_REF" "$REPOSITORY" "$TEMP_DIR/source"
 [[ -f "$TEMP_DIR/source/install-panel.sh" ]] || die "Update package is incomplete."
 chmod 0700 "$TEMP_DIR/source/install-panel.sh"

@@ -6,7 +6,7 @@ umask 077
 die() { echo "ERROR: $*" >&2; exit 1; }
 command -v flock >/dev/null 2>&1 || die "flock is required (package: util-linux)."
 exec 9>/run/lock/web-panel-proxy.lock
-flock -n 9 || die "Another WEB PANEL PROXY install, update or removal is already running."
+flock -n 9 || die "Another AKPROJECT PROXY install, update or removal is already running."
 cleanup_credentials() {
     if [[ -f /etc/web-proxy-panel/install-credentials ]]; then
         command -v shred >/dev/null 2>&1 && shred -u /etc/web-proxy-panel/install-credentials 2>/dev/null || \
@@ -15,7 +15,7 @@ cleanup_credentials() {
 }
 trap cleanup_credentials EXIT
 
-echo "WEB PANEL PROXY V 2.0: preparing server..."
+echo "AKPROJECT PROXY: preparing server..."
 
 PANEL_UPDATE=0
 if [[ -s /var/lib/tproxy-panel/data.json ]] &&

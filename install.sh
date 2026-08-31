@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# Public one-command bootstrapper for WEB PANEL PROXY V 2.0.
+# Public one-command bootstrapper for AKPROJECT PROXY.
 set -Eeuo pipefail
 umask 077
 
-REPOSITORY="https://github.com/POLESNIESOVETI12/web-panel-proxy.git"
+REPOSITORY="https://github.com/TETRIX8/akproject-web-panel-proxy.git"
 RELEASE_REF="${WEB_PANEL_PROXY_REF:-v2.0.2}"
 
 die() { echo "ERROR: $*" >&2; exit 1; }
 [[ ${EUID:-1} -eq 0 ]] || die "Run this command with sudo or as root."
 
-echo "WEB PANEL PROXY V 2.0 — downloading installation files..."
+echo "AKPROJECT PROXY — downloading installation files..."
 
 if ! command -v git >/dev/null 2>&1; then
     export DEBIAN_FRONTEND=noninteractive

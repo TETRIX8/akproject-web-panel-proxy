@@ -135,7 +135,7 @@ on_error() {
 }
 trap on_error ERR
 
-echo "Configuring WEB PANEL PROXY V 2.0..."
+echo "Configuring AKPROJECT PROXY..."
 
 [[ $EUID -eq 0 ]] || die "Run this installer as root."
 [[ "$(uname -m)" == "x86_64" ]] || die "x86_64 is required."
@@ -347,13 +347,13 @@ background:conic-gradient(from 90deg,transparent,rgba(75,210,255,.09),transparen
 animation:spin 18s linear infinite}
 .bg:after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.35) 1px,transparent 1px);background-size:42px 42px;opacity:.12;animation:drift 20s linear infinite}
 .card{position:relative;width:min(680px,calc(100% - 32px));padding:44px 34px 30px;text-align:center;border:1px solid rgba(255,255,255,.11);border-radius:28px;background:rgba(10,14,24,.72);backdrop-filter:blur(22px);box-shadow:0 30px 90px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.07);animation:enter .8s cubic-bezier(.2,.8,.2,1) both}
-.logo{width:78px;height:78px;margin:0 auto 22px;border-radius:24px;display:grid;place-items:center;font-size:34px;background:linear-gradient(135deg,#56d7ff,#7568ff);box-shadow:0 0 45px rgba(86,180,255,.3);animation:float 4s ease-in-out infinite}
+.logo{width:78px;height:78px;margin:0 auto 22px;border-radius:24px;display:grid;place-items:center;font-size:34px;background:linear-gradient(135deg,#72e5c4,#8b7cff);box-shadow:0 0 45px rgba(86,180,255,.3);animation:float 4s ease-in-out infinite}
 h1{margin:0;font-size:clamp(30px,6vw,48px);letter-spacing:-1.8px}
 p{margin:14px auto 0;max-width:520px;color:#98a3b7;font-size:16px;line-height:1.65}
 .status{display:inline-flex;align-items:center;gap:9px;margin-top:24px;padding:10px 15px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:rgba(255,255,255,.035);color:#cdd5e5;font-size:14px}
 .dot{width:8px;height:8px;border-radius:50%;background:#63f5b0;box-shadow:0 0 15px #63f5b0;animation:pulse 1.7s infinite}
 .line{height:1px;margin:28px 0 20px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent)}
-.footer{font-size:12px;color:#596579}
+.footer{font-size:12px;color:#596579}.eyebrow{color:#a89cff;font-size:11px;font-weight:700;letter-spacing:.18em;margin-bottom:14px}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes drift{to{transform:translate3d(42px,42px,0)}}
 @keyframes enter{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
@@ -366,7 +366,7 @@ p{margin:14px auto 0;max-width:520px;color:#98a3b7;font-size:16px;line-height:1.
 <div class="bg"></div>
 <main class="card">
   <div class="logo">⚡</div>
-  <h1>Система подключения</h1>
+  <div class="eyebrow">AKPROJECT PROXY</div><h1>Защищённое подключение</h1>
   <p>Безопасный доступ активен. Соединение проверяется автоматически.</p>
   <div class="status"><span class="dot"></span> Система работает</div>
   <div class="line"></div>
@@ -386,7 +386,7 @@ s = open(index, encoding="utf-8").read()
 m = re.search(r"<style\b[^>]*>(.*?)</style\s*>", s, flags=re.I | re.S)
 if not m:
     raise SystemExit("Default public page has no style block")
-css = "/* WEB PANEL PROXY default public CSS */\n" + m.group(1).strip() + "\n"
+css = "/* AKPROJECT PROXY default public CSS */\n" + m.group(1).strip() + "\n"
 s = s[:m.start()] + '<link rel="stylesheet" href="/styles.css">' + s[m.end():]
 open(stylesheet, "w", encoding="utf-8").write(css)
 open(index, "w", encoding="utf-8").write(s)
