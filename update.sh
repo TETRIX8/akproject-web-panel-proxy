@@ -11,6 +11,20 @@ DATA_FILE="/var/lib/tproxy-panel/data.json"
 PRIMARY_SECRET="/etc/web-proxy-panel/primary-secret"
 
 die() { echo "ERROR: $*" >&2; exit 1; }
+pkg_install() {
+    if command -v apt-get >/dev/null 2>&1; then
+        export DEBIAN_FRONTEND=noninteractive
+        apt-get -o DPkg::Lock::Timeout=600 update
+        apt-get -o DPkg::Lock::Timeout=600 install -y --no-install-recommends "$@"
+    elif command -v dnf >/dev/null 2>&1; then
+        dnf -y install "$@"
+    elif command -v yum >/dev/null 2>&1; then
+        yum -y install "$@"
+    else
+        die "Supported package manager not found: apt-get, dnf or yum."
+    fi
+}
+
 [[ ${EUID} -eq 0 ]] || die "Run as root: sudo -i"
 command -v flock >/dev/null 2>&1 || die "flock is required (package: util-linux)."
 exec 9>/run/lock/web-panel-proxy.lock
@@ -134,9 +148,7 @@ rollback_update() {
 
 if ! command -v git >/dev/null 2>&1; then
     echo "Installing Git (required to download the update)..."
-    export DEBIAN_FRONTEND=noninteractive
-    apt-get -o DPkg::Lock::Timeout=600 update
-    apt-get -o DPkg::Lock::Timeout=600 install -y --no-install-recommends git
+    pkg_install git
 fi
 
 TEMP_DIR="$(mktemp -d /tmp/web-panel-proxy-update.XXXXXX)"

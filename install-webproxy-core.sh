@@ -17,6 +17,20 @@ MT_PORT=2398
 CHANNEL_B64="aHR0cHM6Ly93d3cueW91dHViZS5jb20vQFBPTEVTTklFU09WRVRJMTI="
 TPROXY_REF="52a5feb7fac38f68da5afef9cedd9b3bfc8473ca"
 
+pkg_install() {
+    if command -v apt-get >/dev/null 2>&1; then
+        export DEBIAN_FRONTEND=noninteractive
+        apt-get -o DPkg::Lock::Timeout=600 update
+        apt-get -o DPkg::Lock::Timeout=600 install -y --no-install-recommends "$@"
+    elif command -v dnf >/dev/null 2>&1; then
+        dnf -y install "$@"
+    elif command -v yum >/dev/null 2>&1; then
+        yum -y install "$@"
+    else
+        die "Supported package manager not found: apt-get, dnf or yum."
+    fi
+}
+
 die() {
     echo
     echo "ERROR: $*" >&2
@@ -213,11 +227,7 @@ fi
 
 echo
 echo "      Preparing primary secret..."
-command -v openssl >/dev/null 2>&1 || {
-    export DEBIAN_FRONTEND=noninteractive
-    apt-get -o DPkg::Lock::Timeout=600 update
-    apt-get -o DPkg::Lock::Timeout=600 install -y --no-install-recommends openssl
-}
+command -v openssl >/dev/null 2>&1 || pkg_install openssl
 SECRET="$(cat /etc/web-proxy-panel/primary-secret 2>/dev/null || true)"
 if ! valid_secret "$SECRET" && [[ -s /etc/tproxy-server/profiles.json ]]; then
     SECRET="$(sed -n 's/.*"secret"[[:space:]]*:[[:space:]]*"\([0-9a-f]*\)".*/\1/p' /etc/tproxy-server/profiles.json | head -n1)"
@@ -251,18 +261,21 @@ case "${ID:-}" in
             die "Debian 12 or newer is required."
         echo "      Debian ${VERSION_ID} / x86_64"
         ;;
+    rhel|centos|rocky|almalinux|fedora)
+        echo "      ${PRETTY_NAME:-$ID} / x86_64"
+        ;;
     *)
-        die "Supported systems: Ubuntu 22.04+ or Debian 12+ (found ${ID:-unknown})."
+        die "Supported systems: Ubuntu 22.04+, Debian 12+, CentOS/RHEL 8+ or compatible (found ${ID:-unknown})."
         ;;
 esac
 
 echo
 echo "[2/10] Installing dependencies..."
-export DEBIAN_FRONTEND=noninteractive
-apt-get -o DPkg::Lock::Timeout=600 update
-apt-get -o DPkg::Lock::Timeout=600 install -y --no-install-recommends \
-    ca-certificates curl git openssl dnsutils nftables \
-    build-essential libssl-dev util-linux zlib1g-dev
+if command -v apt-get >/dev/null 2>&1; then
+    pkg_install ca-certificates curl git openssl dnsutils nftables build-essential libssl-dev util-linux zlib1g-dev
+else
+    pkg_install ca-certificates curl git openssl bind-utils nftables gcc gcc-c++ make openssl-devel util-linux zlib-devel
+fi
 echo "      OK"
 
 # Direct MTProto must bypass any HTTPS/CDN proxy in front of the site domain.
@@ -476,14 +489,17 @@ if [[ "$REUSE_MT" != "1" ]]; then
     # Ubuntu may start unattended-upgrades between our dependency step and
     # this call, so add the same bounded wait used by the main installer.
     MT_INSTALLER="$REPO_DIR/deploy/install-mtproxy.sh"
-    grep -Fxq 'apt-get update' "$MT_INSTALLER" ||
-        die "Unexpected pinned MTProxy installer: apt update command not found."
-    grep -Fxq 'apt-get install -y --no-install-recommends ca-certificates curl build-essential libssl-dev util-linux zlib1g-dev' "$MT_INSTALLER" ||
-        die "Unexpected pinned MTProxy installer: apt install command not found."
-    sed -i \
-        -e 's/^apt-get update$/apt-get -o DPkg::Lock::Timeout=600 update/' \
-        -e 's/^apt-get install /apt-get -o DPkg::Lock::Timeout=600 install /' \
-        "$MT_INSTALLER"
+    if command -v apt-get >/dev/null 2>&1; then
+        sed -i \
+            -e 's/^apt-get update$/apt-get -o DPkg::Lock::Timeout=600 update/' \
+            -e 's/^apt-get install /apt-get -o DPkg::Lock::Timeout=600 install /' \
+            "$MT_INSTALLER"
+    else
+        sed -i \
+            -e '/^apt-get update$/d' \
+            -e 's/^apt-get install -y --no-install-recommends ca-certificates curl build-essential libssl-dev util-linux zlib1g-dev$/if command -v dnf >\\/dev\\/null 2>\\/dev\\/null; then dnf -y install ca-certificates curl gcc gcc-c++ make openssl-devel util-linux zlib-devel; else yum -y install ca-certificates curl gcc gcc-c++ make openssl-devel util-linux zlib-devel; fi/' \
+            "$MT_INSTALLER"
+    fi
     "$MT_INSTALLER"
 else
     echo "      MTProxy installation skipped; existing instance is already listening on :2398."

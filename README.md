@@ -14,7 +14,7 @@ AKPROJECT PROXY — установщик Telegram WEB Proxy и веб-панел
 
 ## Возможности
 
-- Установка одной командой на Ubuntu 22.04+ или Debian 12+ с безопасным продолжением после прерванной установки.
+- Установка одной командой на Ubuntu 22.04+, Debian 12+, CentOS/RHEL 8+, Rocky Linux и AlmaLinux с безопасным продолжением после прерванной установки.
 - Telegram WEB Proxy через HTTPS/443.
 - Веб-панель по защищённому случайному адресу.
 - Создание и удаление пользовательских подключений.
@@ -28,13 +28,17 @@ AKPROJECT PROXY — установщик Telegram WEB Proxy и веб-панел
 
 ## Требования
 
-- VPS с Ubuntu 22.04+ или Debian 12+.
+- VPS с Ubuntu 22.04+, Debian 12+, CentOS/RHEL 8+ или совместимой RPM-системой с `systemd`.
 -[АРЕНДОВАТЬ VPS И ДОМЕН](https://play2go.cloud/?ref_id=m1o4quWG0sE)
 - Домен или поддомен с A-записью, направленной на IPv4 вашего VPS.
 - Открытые порты `80` и `443`.
 - Доступ к серверу от пользователя `root`.
 - Если Caddy уже установлен, его бинарник, служба и посторонние сайты сохраняются; установщик добавляет или обновляет только блок выбранного домена WEB Proxy.
 - Порты `80/443` могут быть заняты Caddy. Другой веб-сервер на этих портах необходимо настроить отдельно или остановить, поскольку два процесса не могут слушать один порт одновременно.
+
+## Поддержка CentOS/RHEL
+
+Установщик автоматически определяет `apt-get`, `dnf` или `yum` и выбирает соответствующие имена пакетов. Для CentOS/RHEL, Rocky Linux и AlmaLinux используется RPM-ветка установки; команду запускать нужно от `root` или через `sudo`.
 
 ## Установка одной командой
 
@@ -143,7 +147,7 @@ systemctl restart tproxy-panel
 
 ## Автор
 
-- YouTube: https://github.com/TETRIX8/akproject-web-panel-proxy
+- Project: https://github.com/TETRIX8/akproject-web-panel-proxy
 - GitHub: https://github.com/TETRIX8/akproject-web-panel-proxy
 
 Поддержка- TEZgpG5rKFZPi8znziAyMD3wiEJQJ3eaQG (USDT TRC 20)

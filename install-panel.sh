@@ -26,6 +26,20 @@ MANAGER="/usr/local/sbin/web-proxy-panelctl"
 QR_BIN="/usr/bin/qrencode"
 
 die(){ echo "ERROR: $*" >&2; exit 1; }
+pkg_install() {
+    if command -v apt-get >/dev/null 2>&1; then
+        export DEBIAN_FRONTEND=noninteractive
+        apt-get -o DPkg::Lock::Timeout=600 update
+        apt-get -o DPkg::Lock::Timeout=600 install -y --no-install-recommends "$@"
+    elif command -v dnf >/dev/null 2>&1; then
+        dnf -y install "$@"
+    elif command -v yum >/dev/null 2>&1; then
+        yum -y install "$@"
+    else
+        die "Supported package manager not found: apt-get, dnf or yum."
+    fi
+}
+
 [[ $EUID -eq 0 ]] || die "Run as root."
 . /etc/os-release
 case "${ID:-}" in
@@ -37,8 +51,11 @@ case "${ID:-}" in
         dpkg --compare-versions "${VERSION_ID:-0}" ge "12" ||
             die "Debian 12 or newer is required."
         ;;
+    rhel|centos|rocky|almalinux|fedora)
+        echo "      RPM-based system detected: ${PRETTY_NAME:-$ID}"
+        ;;
     *)
-        die "Supported systems: Ubuntu 22.04+ or Debian 12+."
+        die "Supported systems: Ubuntu 22.04+, Debian 12+, CentOS/RHEL 8+ or compatible."
         ;;
 esac
 echo "Platform: ${PRETTY_NAME:-${ID} ${VERSION_ID}}"
@@ -64,10 +81,8 @@ if ! [[ "$ACME_EMAIL" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$ ]]; th
         die "Invalid ACME email."
 fi
 
-export DEBIAN_FRONTEND=noninteractive
 if ! command -v qrencode >/dev/null 2>&1; then
-    apt-get -o DPkg::Lock::Timeout=600 update
-    apt-get -o DPkg::Lock::Timeout=600 install -y --no-install-recommends qrencode
+    pkg_install qrencode
 fi
 
 install -d -m 0755 "$APP_DIR" /etc/web-proxy-panel
